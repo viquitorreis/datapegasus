@@ -2,11 +2,16 @@ package datapegasus
 
 import "github.com/valyala/fasthttp"
 
-type ScrapeService struct{}
-
-func (*ScrapeService) Get(dst []byte, url string) (statusCode int, body []byte, err error) {
+func (p *Pegasus) Get(dst []byte, url string) (statusCode int, body []byte, err error) {
 	req := fasthttp.AcquireRequest()
-	req.Header.SetUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36")
+	// req.Header.SetUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36")
+	// req.Header.SetUserAgent(p.UserAgent)
+	// req.Header = *p.Headers
+
+	req.Header = fasthttp.RequestHeader{}
+
+	p.Headers.CopyTo(&req.Header)
+
 	req.SetRequestURI(url)
 
 	resp := fasthttp.AcquireResponse()
